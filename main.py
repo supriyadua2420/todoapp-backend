@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Body
 from sqlalchemy.orm import Session
 import models, schemas, crud
 from database import SessionLocal, engine
@@ -32,12 +32,31 @@ def create(task: schemas.TaskCreate, db: Session = Depends(get_db)):
 def read_tasks(db: Session = Depends(get_db)):
     return crud.get_tasks(db)
 
-@app.put("/tasks/{task_id}/complete", response_model=schemas.Task)
-def complete_task(task_id: int, db: Session = Depends(get_db)):
+# @app.put("/tasks/{task_id}/", response_model=schemas.Task)
+# def complete_task(task_id: int, db: Session = Depends(get_db)):
+#     task = crud.mark_complete(db, task_id)
+#     if not task:
+#         raise HTTPException(status_code=404, detail="Task not found")
+#     return task
+
+@app.put("/tasks/{task_id}/", response_model=schemas.Task)
+def update_task(
+    task_id: int,
+    task_data: schemas.TaskUpdate,
+    db: Session = Depends(get_db)
+):
+    # task = db.query(models.Task).filter(models.Task.id == task_id).first()
     task = crud.mark_complete(db, task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
+
+    # task.title = task_data.title
+    # task.completed = task_data.completed
+
+    # db.commit()
+    # db.refresh(task)
     return task
+
 
 @app.delete("/tasks/{task_id}")
 def delete_task(task_id: int, db: Session = Depends(get_db)):

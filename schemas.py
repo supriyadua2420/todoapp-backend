@@ -6,6 +6,10 @@ class TaskBase(BaseModel):
 class TaskCreate(TaskBase):
     pass
 
+class TaskUpdate(BaseModel):
+    title: str
+    completed: bool
+
 class Task(TaskBase):
     id: int
     completed: bool
