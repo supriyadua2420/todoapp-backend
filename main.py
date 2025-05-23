@@ -45,16 +45,16 @@ def update_task(
     task_data: schemas.TaskUpdate,
     db: Session = Depends(get_db)
 ):
-    # task = db.query(models.Task).filter(models.Task.id == task_id).first()
-    task = crud.mark_complete(db, task_id)
+    task = db.query(models.Task).filter(models.Task.id == task_id).first()
+    # task = crud.mark_complete(db, task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
 
-    # task.title = task_data.title
-    # task.completed = task_data.completed
+    task.title = task_data.title
+    task.completed = task_data.completed
 
-    # db.commit()
-    # db.refresh(task)
+    db.commit()
+    db.refresh(task)
     return task
 
 

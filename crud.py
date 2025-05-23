@@ -25,3 +25,11 @@ def delete_task(db: Session, task_id: int):
         db.delete(task)
         db.commit()
     return task
+
+# def delete_task(db: Session, task_id: int):
+#     task = db.query(models.Task).filter(models.Task.id == task_id).first()
+#     if not task:
+#         return None
+#     db.delete(task)
+#     db.commit()
+#     return task
